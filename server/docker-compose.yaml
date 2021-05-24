@@ -1,0 +1,51 @@
+version: "3.7"
+
+services:
+
+  #Laravel App
+  app:
+    build:
+      args:
+        user: maruan
+        uid: 1000
+      context: ./php
+      dockerfile: Dockerfile
+    image: laravel-app
+    restart: unless-stopped
+    working_dir: /var/www/project
+    volumes:
+      - ./src/project:/var/www/project
+    networks:
+      - mynetwork
+
+  #Nginx Service
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - 8000:80
+    volumes:
+      - ./src/project:/var/www/project
+      - ./nginx/conf.d:/etc/nginx/conf.d/
+    networks:
+      - mynetwork
+  db:
+    image: mysql:8
+    container_name: mysql8-container
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    restart: always # always restart unless stopped manually
+    environment:
+      MYSQL_DATABASE: test
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_PASSWORD: secret
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+  landing:
+    driver: bridge

@@ -1,0 +1,2 @@
+INSERT INTO test.orders (id,product_id,quantity,order_date,invoice_date,total_price,deadline_payment_date,paid_amount1,paid_amount2,budget_id,status,counteragent_id) VALUES
+	 (3,2,15,'2021-05-18 12:38:01','2021-05-18 12:38:01',1200000,'2021-05-18 12:38:01',NULL,NULL,1,2,3);
